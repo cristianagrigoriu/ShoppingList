@@ -15,6 +15,7 @@ variables:
   buildConfiguration: 'Release'
   azureSubscription: AzureRM
   appName: shopping-list-cg
+  vmImageName: 'ubuntu-latest'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -35,9 +36,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-## Add the below snippet at the end of your pipeline
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
+  inputs:
+    azureSubscription: AzureRM
+    appType: webAppLinux
+    appName: shopping-list-cg
+    package: $(System.ArtifactsDirectory)/**/*.zip
+    
+- task: AzureWebApp@1
   inputs:
     azureSubscription: AzureRM
     appType: webAppLinux
