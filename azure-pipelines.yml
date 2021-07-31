@@ -13,6 +13,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  azureSubscription: Visual Studio Professional Subscription
+  appName: shopping-list-cg
 
 steps:
 - task: NuGetToolInstaller@1
@@ -32,11 +34,6 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-variables: 
-  ## Add this under variables section in the pipeline
-  azureSubscription: Visual Studio Professional Subscription
-  appName: <Name of the Web App>
 
 ## Add the below snippet at the end of your pipeline
 - task: AzureWebApp@1
