@@ -13,7 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  azureSubscription: Visual Studio Professional Subscription
+  azureSubscription: AzureRM
   appName: shopping-list-cg
 
 steps:
@@ -39,7 +39,7 @@ steps:
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
   inputs:
-    azureSubscription: Visual Studio Professional Subscription
+    azureSubscription: AzureRM
     appType: webAppLinux
     appName: shopping-list-cg
     package: $(System.ArtifactsDirectory)/**/*.zip
