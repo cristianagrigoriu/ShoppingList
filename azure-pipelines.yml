@@ -35,15 +35,15 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- task: AzureWebApp@1
-  displayName: 'Azure Web App Deploy'
-  inputs:
-    azureSubscription: AzureRM
-    appType: webAppLinux
-    appName: shopping-list-cg
-    package: $(System.ArtifactsDirectory)/**/*.zip
     
+- task: DotNetCoreCLI@2
+  displayName: 'Publish zip'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(System.ArtifactsDirectory)'
+    zipAfterPublish: True
+
 - task: AzureRmWebAppDeployment@4
   displayName: 'Deploy to Linux web app'
   inputs:
