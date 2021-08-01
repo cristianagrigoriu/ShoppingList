@@ -42,10 +42,10 @@ steps:
     azureSubscription: AzureRM
     appType: webAppLinux
     appName: shopping-list-cg
-    package: $(System./**/*.zip
+    package: $(System.ArtifactsDirectory)/**/*.zip
     
 - task: AzureRmWebAppDeployment@4
-  displayName: Deploy to Linux web app
+  displayName: 'Deploy to Linux web app'
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'AzureRM'
