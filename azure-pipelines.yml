@@ -41,7 +41,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(System.ArtifactsDirectory)'
+    arguments: '--configuration $(BuildConfiguration) --output $(System.DefaultWorkingDirectory)'
     zipAfterPublish: True
 
 - task: AzureRmWebAppDeployment@4
@@ -51,5 +51,5 @@ steps:
     azureSubscription: 'AzureRM'
     appType: 'webAppLinux'
     WebAppName: 'shopping-list-cg'
-    packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
   
