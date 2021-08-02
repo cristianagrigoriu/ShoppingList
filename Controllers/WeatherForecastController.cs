@@ -32,15 +32,16 @@ namespace Shopping_List.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            var item = await this._cosmosDbService.GetItemAsync("1");
+            var workItem = await this._cosmosDbService.GetItemAsync("1");
             var items = await _cosmosDbService.GetMultipleAsync("SELECT * FROM c");
 
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return items.Select(item => new WeatherForecast
             {
-                Date = DateTime.Now.AddDays(index),
+                Date = DateTime.Now.AddDays(1),
                 TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                Summary = Summaries[rng.Next(Summaries.Length)],
+                Description = item.Description
             })
             .ToArray();
         }
