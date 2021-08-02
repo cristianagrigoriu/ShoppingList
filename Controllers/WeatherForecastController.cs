@@ -32,7 +32,7 @@ namespace Shopping_List.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            //var item = await this._cosmosDbService.GetItemAsync("work");
+            var item = await this._cosmosDbService.GetItemAsync("1");
             var items = await _cosmosDbService.GetMultipleAsync("SELECT * FROM c");
 
             var rng = new Random();
@@ -58,11 +58,11 @@ namespace Shopping_List.Controllers
             this._container = dbClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<Item> GetItemAsync(string category)
         {
             try
             {
-                ItemResponse<Item> response = await this._container.ReadItemAsync<Item>("work", new PartitionKey("partitionKey"));
+                ItemResponse<Item> response = await this._container.ReadItemAsync<Item>("1", new PartitionKey("work"));
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -89,10 +89,10 @@ namespace Shopping_List.Controllers
     {
         //Task<IEnumerable<Item>> GetItemsAsync(string query);
         Task<IEnumerable<Item>> GetMultipleAsync(string queryString);
-        Task<Item> GetItemAsync(string id);
+        Task<Item> GetItemAsync(string category);
         //Task AddItemAsync(Item item);
         //Task UpdateItemAsync(string id, Item item);
-        //Task DeleteItemAsync(string id);
+        //Task DeleteItemAsync(string category);
     }
 
     public class Item
@@ -108,5 +108,8 @@ namespace Shopping_List.Controllers
 
         [JsonProperty(PropertyName = "isComplete")]
         public bool Completed { get; set; }
+
+        [JsonProperty(PropertyName = "category")]
+        public string Category { get; set; }
     }
 }
