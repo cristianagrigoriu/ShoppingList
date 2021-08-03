@@ -33,7 +33,16 @@ namespace Shopping_List.Controllers
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
             var workItem = await this._cosmosDbService.GetItemAsync("1");
-            var items = await _cosmosDbService.GetMultipleAsync("SELECT * FROM c");
+            var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+            var newItem = new Item
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "books",
+                Description = "Harry Potter",
+                Category = "personal",
+                Completed = false
+            };
+            await _cosmosDbService.AddItemAsync(newItem);
 
             var rng = new Random();
             return items.Select(item => new WeatherForecast
@@ -73,7 +82,7 @@ namespace Shopping_List.Controllers
 
         }
 
-        public async Task<IEnumerable<Item>> GetMultipleAsync(string queryString)
+        public async Task<IEnumerable<Item>> GetItemsAsync(string queryString)
         {
             var query = _container.GetItemQueryIterator<Item>(new QueryDefinition(queryString));
             var results = new List<Item>();
@@ -84,14 +93,29 @@ namespace Shopping_List.Controllers
             }
             return results;
         }
+
+        public async Task AddItemAsync(Item item)
+        {
+            await this._container.CreateItemAsync<Item>(item, new PartitionKey(item.Category));
+        }
+
+        public async Task DeleteItemAsync(string id)
+        {
+            await this._container.DeleteItemAsync<Item>(id, new PartitionKey(id));
+        }
+
+        public async Task UpdateItemAsync(string id, Item item)
+        {
+            await this._container.UpsertItemAsync<Item>(item, new PartitionKey(id));
+        }
     }
 
     public interface ICosmosDbService
     {
         //Task<IEnumerable<Item>> GetItemsAsync(string query);
-        Task<IEnumerable<Item>> GetMultipleAsync(string queryString);
+        Task<IEnumerable<Item>> GetItemsAsync(string queryString);
         Task<Item> GetItemAsync(string category);
-        //Task AddItemAsync(Item item);
+        Task AddItemAsync(Item item);
         //Task UpdateItemAsync(string id, Item item);
         //Task DeleteItemAsync(string category);
     }
