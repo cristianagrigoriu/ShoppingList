@@ -35,11 +35,12 @@ namespace Shopping_List.Controllers
         {
             var workItem = await this._cosmosDbService.GetItemAsync("1");
 
-            var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+            
 
+            var id = Guid.NewGuid();
             var newItem = new Item
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = id.ToString(),
                 Name = "books",
                 Description = "Harry Potter",
                 Category = "personal",
@@ -53,7 +54,11 @@ namespace Shopping_List.Controllers
                 await _cosmosDbService.DeleteItemAsync("7d368e0a-1003-4d6c-aae7-bd9a22d4d998");
             }
 
+            newItem.Description = "Harry Potter and the Chamber of Secrets";
+            await _cosmosDbService.UpdateItemAsync(id.ToString(), newItem);
+
             var rng = new Random();
+            var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
             return items.Select(item => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(1),
@@ -115,7 +120,7 @@ namespace Shopping_List.Controllers
 
         public async Task UpdateItemAsync(string id, Item item)
         {
-            await this._container.UpsertItemAsync<Item>(item, new PartitionKey(id));
+            await this._container.UpsertItemAsync<Item>(item, new PartitionKey("personal"));
         }
     }
 
@@ -124,7 +129,7 @@ namespace Shopping_List.Controllers
         Task<IEnumerable<Item>> GetItemsAsync(string queryString);
         Task<Item> GetItemAsync(string id);
         Task AddItemAsync(Item item);
-        //Task UpdateItemAsync(string id, Item item);
+        Task UpdateItemAsync(string id, Item item);
         Task DeleteItemAsync(string id);
     }
 
