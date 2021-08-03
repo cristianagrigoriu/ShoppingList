@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,9 @@ namespace Shopping_List.Controllers
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
             var workItem = await this._cosmosDbService.GetItemAsync("1");
+
             var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+
             var newItem = new Item
             {
                 Id = Guid.NewGuid().ToString(),
@@ -43,6 +46,12 @@ namespace Shopping_List.Controllers
                 Completed = false
             };
             await _cosmosDbService.AddItemAsync(newItem);
+
+            var testItem = await _cosmosDbService.GetItemAsync("7d368e0a-1003-4d6c-aae7-bd9a22d4d998");
+            if (testItem != null)
+            {
+                await _cosmosDbService.DeleteItemAsync("7d368e0a-1003-4d6c-aae7-bd9a22d4d998");
+            }
 
             var rng = new Random();
             return items.Select(item => new WeatherForecast
@@ -58,7 +67,7 @@ namespace Shopping_List.Controllers
 
     public class CosmosDbService : ICosmosDbService
     {
-        private Container _container;
+        private Microsoft.Azure.Cosmos.Container _container;
 
         public CosmosDbService(
             CosmosClient dbClient,
@@ -68,11 +77,11 @@ namespace Shopping_List.Controllers
             this._container = dbClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task<Item> GetItemAsync(string category)
+        public async Task<Item> GetItemAsync(string id)
         {
             try
             {
-                ItemResponse<Item> response = await this._container.ReadItemAsync<Item>("1", new PartitionKey("work"));
+                ItemResponse<Item> response = await this._container.ReadItemAsync<Item>(id, new PartitionKey("work"));
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -101,7 +110,7 @@ namespace Shopping_List.Controllers
 
         public async Task DeleteItemAsync(string id)
         {
-            await this._container.DeleteItemAsync<Item>(id, new PartitionKey(id));
+            await this._container.DeleteItemAsync<Item>(id, new PartitionKey("personal"));
         }
 
         public async Task UpdateItemAsync(string id, Item item)
@@ -112,12 +121,11 @@ namespace Shopping_List.Controllers
 
     public interface ICosmosDbService
     {
-        //Task<IEnumerable<Item>> GetItemsAsync(string query);
         Task<IEnumerable<Item>> GetItemsAsync(string queryString);
-        Task<Item> GetItemAsync(string category);
+        Task<Item> GetItemAsync(string id);
         Task AddItemAsync(Item item);
         //Task UpdateItemAsync(string id, Item item);
-        //Task DeleteItemAsync(string category);
+        Task DeleteItemAsync(string id);
     }
 
     public class Item
