@@ -44,7 +44,7 @@ namespace Shopping_List.Controllers
                 Name = "books",
                 Description = "Harry Potter",
                 Category = "personal",
-                Completed = false
+                IsCompleted = false
             };
             await _cosmosDbService.AddItemAsync(newItem);
 
@@ -145,7 +145,7 @@ namespace Shopping_List.Controllers
         public string Description { get; set; }
 
         [JsonProperty(PropertyName = "isComplete")]
-        public bool Completed { get; set; }
+        public bool IsCompleted { get; set; }
 
         [JsonProperty(PropertyName = "category")]
         public string Category { get; set; }

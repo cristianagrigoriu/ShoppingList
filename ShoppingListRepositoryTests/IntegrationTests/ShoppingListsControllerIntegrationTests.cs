@@ -26,8 +26,8 @@ namespace ShoppingListRepositoryTests
 
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
-            //Assert.Equals("text/html; charset=utf-8",
-            //    response.Content.Headers.ContentType.ToString());
+            Assert.Equal("application/json; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
         }
     }
 }
