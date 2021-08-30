@@ -39,6 +39,11 @@ export class FetchData extends Component {
     );
   }
 
+  addList()
+  {
+    console.log("DA");
+  }
+
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
@@ -48,6 +53,7 @@ export class FetchData extends Component {
       <div>
         <h1 id="tabelLabel" >Shopping Lists</h1>
         <p>This component demonstrates fetching data from the server.</p>
+            <button type="button" className="btn btn-primary" onClick={this.addList}>Add List</button>
         {contents}
       </div>
     );
