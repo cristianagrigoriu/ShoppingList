@@ -30,7 +30,8 @@ namespace Shopping_List.Controllers
                     Category = item.Category,
                     Name = item.Name,
                     Description = item.Description,
-                    IsCompleted = item.IsCompleted
+                    IsCompleted = item.IsCompleted,
+                    DateTimeAdded = item.DateTimeAdded.Date.ToShortDateString()
                 })
                 .ToArray();
         }

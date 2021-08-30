@@ -1,4 +1,6 @@
-﻿namespace Shopping_List.Controllers
+﻿using System;
+
+namespace Shopping_List.Controllers
 {
     using Newtonsoft.Json;
 
@@ -20,6 +22,6 @@
         public bool IsCompleted { get; set; }
 
         [JsonProperty(PropertyName = "dateTimeAdded")]
-        public string DateTimeAdded { get; set; }
+        public DateTime DateTimeAdded { get; set; }
     }
 }

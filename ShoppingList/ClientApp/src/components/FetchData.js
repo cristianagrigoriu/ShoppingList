@@ -21,6 +21,7 @@ export class FetchData extends Component {
             <th>Name</th>
             <th>Description</th>
             <th>IsCompleted</th>
+            <th>Creation Time</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@ export class FetchData extends Component {
                 <td>{shoppingList.name}</td>
                 <td>{shoppingList.description}</td>
                 <td>{shoppingList.isCompleted ? "True" : "False"}</td>
+                <td>{shoppingList.dateTimeAdded}</td>
             </tr>
           )}
         </tbody>
