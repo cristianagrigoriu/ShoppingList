@@ -27,5 +27,33 @@
             }
             return results;
         }
+
+        public async Task<ShoppingList> GetItemAsync(string id)
+        {
+            try
+            {
+                ItemResponse<ShoppingList> response = await this._container.ReadItemAsync<ShoppingList>(id, new PartitionKey(id));
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
+        public async Task AddItemAsync(ShoppingList shoppingList)
+        {
+            await this._container.CreateItemAsync<ShoppingList>(shoppingList, new PartitionKey(shoppingList.Category));
+        }
+
+        public async Task UpdateItemAsync(string id, ShoppingList shoppingList)
+        {
+            await this._container.UpsertItemAsync<ShoppingList>(shoppingList, new PartitionKey("personal")); //id?
+        }
+
+        public async Task DeleteItemAsync(string id)
+        {
+            await this._container.DeleteItemAsync<ShoppingList>(id, new PartitionKey("personal")); //id
+        }
     }
 }
