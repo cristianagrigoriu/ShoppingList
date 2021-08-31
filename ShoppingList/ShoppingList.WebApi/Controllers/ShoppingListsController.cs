@@ -12,19 +12,19 @@ namespace Shopping_List.Controllers
     [Route("[controller]")]
     public class ShoppingListsController : ControllerBase
     {
-        private readonly ICosmosDbService _cosmosDbService;
+        private readonly IShoppingListsRepository _shoppingListsRepository;
 
-        public ShoppingListsController(ICosmosDbService cosmosDbService)
+        public ShoppingListsController(IShoppingListsRepository shoppingListsRepository)
         {
-            _cosmosDbService = cosmosDbService;
+            _shoppingListsRepository = shoppingListsRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ShoppingList>> Get()
+        public async Task<IEnumerable<Shopping_List.ShoppingList>> Get()
         {
-            var items = await _cosmosDbService.GetItemsAsync("SELECT * FROM c");
+            var items = await _shoppingListsRepository.GetAllItems();
 
-            return items.Select(item => new ShoppingList()
+            return items.Select(item => new Shopping_List.ShoppingList()
                 {
                     Id = item.Id,
                     Category = item.Category,

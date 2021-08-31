@@ -4,7 +4,7 @@ namespace Shopping_List.Controllers
 {
     using Newtonsoft.Json;
 
-    public class Item
+    public class ShoppingList
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }

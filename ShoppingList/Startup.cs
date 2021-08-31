@@ -1,15 +1,14 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Shopping_List.Controllers;
-
 namespace Shopping_List
 {
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Controllers;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,7 +29,8 @@ namespace Shopping_List
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            services.AddSingleton<ICosmosDbService>(
+
+            services.AddSingleton<IShoppingListsRepository>(
                 InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
         }
 
@@ -72,18 +72,18 @@ namespace Shopping_List
             });
         }
 
-        private static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+        private static async Task<CosmosDbRepository> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
         {
-            string databaseName = configurationSection.GetSection("DatabaseName").Value;
-            string containerName = configurationSection.GetSection("ContainerName").Value;
-            string account = configurationSection.GetSection("Account").Value;
-            string key = configurationSection.GetSection("Key").Value;
+            var databaseName = configurationSection.GetSection("DatabaseName").Value;
+            var containerName = configurationSection.GetSection("ContainerName").Value;
+            var account = configurationSection.GetSection("Account").Value;
+            var key = configurationSection.GetSection("Key").Value;
             Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
-            CosmosDbService cosmosDbService = new CosmosDbService(client, databaseName, containerName);
+            CosmosDbRepository cosmosDbShoppingListsRepository = new CosmosDbRepository(client, databaseName, containerName);
             Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
-            return cosmosDbService;
+            return cosmosDbShoppingListsRepository;
         }
     }
 }
