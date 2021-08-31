@@ -1,7 +1,5 @@
 ﻿namespace Shopping_List
 {
-    using System;
-
     public class ShoppingList
     {
         public string Id { get; set; }

@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace Shopping_List.Controllers
+﻿namespace Shopping_List.Controllers
 {
     using Newtonsoft.Json;
+    using System;
 
     public class ShoppingList
     {

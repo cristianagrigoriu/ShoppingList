@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos.Linq;
-
-namespace Shopping_List.Controllers
+﻿namespace Shopping_List.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
