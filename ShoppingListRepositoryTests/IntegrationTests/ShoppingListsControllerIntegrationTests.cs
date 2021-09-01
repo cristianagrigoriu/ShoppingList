@@ -52,7 +52,7 @@ namespace ShoppingListRepositoryTests
                 Name = "office supplies",
                 Description = "this and that",
                 IsCompleted = false,
-                DateTimeAdded = DateTime.Now.ToShortTimeString()
+                CreationDate = DateTime.Now
             };
 
             ////var shoppingListJson = new StringContent(

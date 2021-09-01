@@ -59,9 +59,10 @@ namespace Shopping_List.Controllers
             var existingShoppingList = shoppingListsRepository.GetItemAsync(id);
             if (existingShoppingList == null) return NotFound($"Could not find shopping list with id = {id}");
 
-            shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
+            return null;
+            //shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
 
-            return existingShoppingList.
+            //return existingShoppingList.
         }
 
         [HttpDelete("{id}")]
