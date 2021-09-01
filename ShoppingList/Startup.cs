@@ -1,3 +1,5 @@
+using System;
+
 namespace Shopping_List
 {
     using System.Threading.Tasks;
@@ -21,6 +23,13 @@ namespace Shopping_List
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHsts(
+                o =>
+                {
+                    o.Preload = true;
+                    o.IncludeSubDomains = true;
+                    o.MaxAge = TimeSpan.FromSeconds(63072000);
+                });
 
             services.AddControllersWithViews();
 

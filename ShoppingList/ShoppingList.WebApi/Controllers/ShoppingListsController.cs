@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Shopping_List.ShoppingList.WebApi.Models;
 
 namespace Shopping_List.Controllers
@@ -48,27 +49,19 @@ namespace Shopping_List.Controllers
 
             await shoppingListsRepository.AddItemAsync(newShoppingList);
 
-            return Created("", shoppingList);
+            return Created("", newShoppingList);
         }
 
         [HttpPut("{id}")]
         public ActionResult<ShoppingListModel> UpdateShoppingList([FromRoute] string id,
-            ShoppingList updatedShoppingList)
+            UpdateShoppingListModelMetadata updatedShoppingList)
         {
             var existingShoppingList = shoppingListsRepository.GetItemAsync(id);
             if (existingShoppingList == null) return NotFound($"Could not find shopping list with id = {id}");
 
             shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
 
-            return new ShoppingListModel
-            {
-                Id = updatedShoppingList.Id,
-                Category = updatedShoppingList.Category,
-                Name = updatedShoppingList.Name,
-                Description = updatedShoppingList.Description,
-                IsCompleted = updatedShoppingList.IsCompleted,
-                DateTimeAdded = updatedShoppingList.DateTimeAdded.Date.ToShortDateString()
-            };
+            return existingShoppingList.
         }
 
         [HttpDelete("{id}")]
