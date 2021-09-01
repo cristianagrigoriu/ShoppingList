@@ -45,7 +45,7 @@ namespace ShoppingListRepositoryTests
 
             // Act
             var shoppingListId = "35E40E50-7974-4AF3-8006-FA3168E8D6BA";
-            var shoppingList = new ShoppingList
+            var shoppingList = new ShoppingListModel
             {
                 Id = shoppingListId,
                 Category = "work",

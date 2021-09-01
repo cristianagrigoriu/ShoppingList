@@ -5,6 +5,12 @@
 
     public class ShoppingList
     {
+        public ShoppingList()
+        {
+            Id = Guid.NewGuid().ToString();
+            DateTimeAdded = DateTime.Now;
+        }
+
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -22,5 +28,7 @@
 
         [JsonProperty(PropertyName = "dateTimeAdded")]
         public DateTime DateTimeAdded { get; set; }
+
+        public DateTime CreationDate => DateTimeAdded.Date;
     }
 }

@@ -43,7 +43,7 @@
 
         public async Task AddItemAsync(ShoppingList shoppingList)
         {
-            await this._container.CreateItemAsync<ShoppingList>(shoppingList, new PartitionKey(shoppingList.Category));
+            await this._container.CreateItemAsync<ShoppingList>(shoppingList, new PartitionKey(shoppingList.Category)); //id
         }
 
         public async Task UpdateItemAsync(string id, ShoppingList shoppingList)
