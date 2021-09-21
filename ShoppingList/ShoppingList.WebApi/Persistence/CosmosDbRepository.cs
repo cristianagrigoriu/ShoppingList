@@ -43,17 +43,17 @@
 
         public async Task AddItemAsync(ShoppingList shoppingList)
         {
-            await this._container.CreateItemAsync<ShoppingList>(shoppingList, new PartitionKey(shoppingList.Category)); //id
+            await this._container.CreateItemAsync<ShoppingList>(shoppingList, new PartitionKey(shoppingList.Id)); //id
         }
 
         public async Task UpdateItemAsync(string id, ShoppingList shoppingList)
         {
-            await this._container.UpsertItemAsync<ShoppingList>(shoppingList, new PartitionKey("personal")); //id?
+            await this._container.UpsertItemAsync<ShoppingList>(shoppingList); //id?
         }
 
         public async Task DeleteItemAsync(string id)
         {
-            await this._container.DeleteItemAsync<ShoppingList>(id, new PartitionKey("personal")); //id
+            await this._container.DeleteItemAsync<ShoppingList>(id, new PartitionKey(id)); //id
         }
     }
 }

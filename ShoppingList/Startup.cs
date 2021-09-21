@@ -31,6 +31,8 @@ namespace Shopping_List
                     o.MaxAge = TimeSpan.FromSeconds(63072000);
                 });
 
+            services.AddSwaggerGen();
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -60,6 +62,16 @@ namespace Shopping_List
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 
