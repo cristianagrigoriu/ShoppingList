@@ -38,7 +38,7 @@ namespace Shopping_List.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ShoppingListModel>> AddShoppingList(ShoppingListModel shoppingList)
+        public async Task<ActionResult<ShoppingListModel>> AddShoppingList(CreateShoppingListModel shoppingList)
         {
             var newShoppingList = new ShoppingList
             {
