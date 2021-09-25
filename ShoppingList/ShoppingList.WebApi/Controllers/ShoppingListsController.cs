@@ -54,15 +54,23 @@ namespace Shopping_List.Controllers
 
         [HttpPut("{id}")]
         public ActionResult<ShoppingListModel> UpdateShoppingList([FromRoute] string id,
-            UpdateShoppingListModelMetadata updatedShoppingList)
+            UpdateShoppingListModel updatedShoppingListModel)
         {
             var existingShoppingList = shoppingListsRepository.GetItemAsync(id);
             if (existingShoppingList == null) return NotFound($"Could not find shopping list with id = {id}");
 
-            return null;
-            //shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
+            var updatedShoppingList = new ShoppingList
+            {
+                Id = id,
+                Category = updatedShoppingListModel.Category,
+                Name = updatedShoppingListModel.Name,
+                Description = updatedShoppingListModel.Description,
+                IsCompleted = updatedShoppingListModel.IsCompleted
+            };
 
-            //return existingShoppingList;
+            shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
+
+            return Ok(updatedShoppingListModel); //should return Id in updated list as well
         }
 
         [HttpDelete("{id}")]

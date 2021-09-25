@@ -88,7 +88,16 @@ namespace ShoppingListRepositoryTests
         [Fact]
         public async Task When_updating_shopping_list_Should_retrieve_updated_list()
         {
-            var id = "0AB98D30-F629-4E3A-87CD-8F030261082D";
+            var createResponse = await client.PostAsJsonAsync("/shoppingLists", new
+            {
+                Category = "work",
+                Name = "office supplies",
+                Description = "this and that"
+            });
+            var createContent = await createResponse.Content.ReadAsStringAsync();
+            JObject createJson = JsonConvert.DeserializeObject<JObject>(createContent);
+            var id = createJson.Value<string>("id");
+
             // Act
             var response = await client.PutAsJsonAsync($"/shoppingLists/{id}", new
             {
@@ -102,7 +111,7 @@ namespace ShoppingListRepositoryTests
 
             var content = await response.Content.ReadAsStringAsync();
             JObject json = JsonConvert.DeserializeObject<JObject>(content);
-            testOutputHelper.WriteLine(json.Value<string>("id"));
+            json.Value<string>("category").Should().Be("work 2");
         }
     }
 }
