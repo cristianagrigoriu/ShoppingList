@@ -1,9 +1,7 @@
-using System;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
 using Newtonsoft.Json.Linq;
 using Xunit.Abstractions;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShoppingListRepositoryTests
 {
@@ -63,6 +61,33 @@ namespace ShoppingListRepositoryTests
             //testOutputHelper.WriteLine(json.Category as string);
             testOutputHelper.WriteLine(json.Value<string>("id"));
             //testOutputHelper.WriteLine(json as string);
+        }
+
+        [Fact]
+        public async Task When_posting_shopping_list_Should_retrieve_newly_list_by_returned_id()
+        {
+            // Arrange
+            var client = factory.CreateClient();
+
+            // Act
+            var response = await client.PostAsJsonAsync("/shoppingLists", new
+            {
+                Category = "work",
+                Name = "office supplies",
+                Description = "this and that"
+            });
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var content = await response.Content.ReadAsStringAsync();
+            JObject json = JsonConvert.DeserializeObject<JObject>(content);
+            var id = json.Value<string>("id");
+            var listResponse = await client.GetAsync($"/shoppingLists/{id}");
+            var listCOntent = await listResponse.Content.ReadAsStringAsync();
+            JObject listJson = JsonConvert.DeserializeObject<JObject>(listCOntent);
+            listJson.Value<string>("description").Should().Be("this and that");
+            listJson.Value<string>("id").Should().Be(id);
         }
     }
 }
