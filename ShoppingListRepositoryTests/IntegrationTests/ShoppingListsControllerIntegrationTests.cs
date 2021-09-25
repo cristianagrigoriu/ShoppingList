@@ -1,6 +1,8 @@
+using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 using Xunit.Abstractions;
 
 namespace ShoppingListRepositoryTests
@@ -17,19 +19,20 @@ namespace ShoppingListRepositoryTests
     {
         private readonly WebApplicationFactory<Startup> factory;
         private readonly ITestOutputHelper testOutputHelper;
+        private readonly HttpClient client;
 
         public ShoppingListsControllerIntegrationTests(WebApplicationFactory<Startup> factory, ITestOutputHelper testOutputHelper)
         {
             this.factory = factory;
             this.testOutputHelper = testOutputHelper;
+            this.client = factory.CreateClient();
         }
+
+        [SetUp]
 
         [Fact]
         public async Task Get_Shopping_Lists()
         {
-            // Arrange
-            var client = factory.CreateClient();
-
             // Act
             var response = await client.GetAsync("/shoppingLists");
 
@@ -42,9 +45,6 @@ namespace ShoppingListRepositoryTests
         [Fact]
         public async Task Post_Shopping_List()
         {
-            // Arrange
-            var client = factory.CreateClient();
-
             // Act
             var response = await client.PostAsJsonAsync("/shoppingLists", new
             {
@@ -58,17 +58,12 @@ namespace ShoppingListRepositoryTests
 
             var content = await response.Content.ReadAsStringAsync();
             JObject json = JsonConvert.DeserializeObject<JObject>(content);
-            //testOutputHelper.WriteLine(json.Category as string);
             testOutputHelper.WriteLine(json.Value<string>("id"));
-            //testOutputHelper.WriteLine(json as string);
         }
 
         [Fact]
         public async Task When_posting_shopping_list_Should_retrieve_newly_list_by_returned_id()
         {
-            // Arrange
-            var client = factory.CreateClient();
-
             // Act
             var response = await client.PostAsJsonAsync("/shoppingLists", new
             {
@@ -88,6 +83,26 @@ namespace ShoppingListRepositoryTests
             JObject listJson = JsonConvert.DeserializeObject<JObject>(listCOntent);
             listJson.Value<string>("description").Should().Be("this and that");
             listJson.Value<string>("id").Should().Be(id);
+        }
+
+        [Fact]
+        public async Task When_updating_shopping_list_Should_retrieve_updated_list()
+        {
+            var id = "0AB98D30-F629-4E3A-87CD-8F030261082D";
+            // Act
+            var response = await client.PutAsJsonAsync($"/shoppingLists/{id}", new
+            {
+                Category = "work 2",
+                Name = "office supplies",
+                Description = "this and that"
+            });
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadAsStringAsync();
+            JObject json = JsonConvert.DeserializeObject<JObject>(content);
+            testOutputHelper.WriteLine(json.Value<string>("id"));
         }
     }
 }
