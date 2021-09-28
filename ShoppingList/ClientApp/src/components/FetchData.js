@@ -41,7 +41,20 @@ export class FetchData extends Component {
 
   addList()
   {
-    console.log("DA");
+      console.log("DA");
+      const response = fetch('shoppingLists', {
+          method: 'POST',
+          body: JSON.stringify({
+              category: 'Home',
+              name: 'Cleaning Supplies',
+              description: 'For the spring cleaning'
+          }),
+          headers: {
+              "Content-type": "application/json; charset=UTF-8"
+          }
+      }).then(response => {
+          return response.json()
+      });
   }
 
   render() {
