@@ -78,6 +78,7 @@ namespace ShoppingListRepositoryTests
             var content = await response.Content.ReadAsStringAsync();
             JObject json = JsonConvert.DeserializeObject<JObject>(content);
             var id = json.Value<string>("id");
+
             var listResponse = await client.GetAsync($"/shoppingLists/{id}");
             var listCOntent = await listResponse.Content.ReadAsStringAsync();
             JObject listJson = JsonConvert.DeserializeObject<JObject>(listCOntent);
@@ -112,6 +113,32 @@ namespace ShoppingListRepositoryTests
             var content = await response.Content.ReadAsStringAsync();
             JObject json = JsonConvert.DeserializeObject<JObject>(content);
             json.Value<string>("category").Should().Be("work 2");
+        }
+
+        [Fact]
+        public async Task When_deleting_shopping_list_Should_not_find_it_anymore()
+        {
+            var createResponse = await client.PostAsJsonAsync("/shoppingLists", new
+            {
+                Category = "work",
+                Name = "office supplies",
+                Description = "this and that"
+            });
+            var createContent = await createResponse.Content.ReadAsStringAsync();
+            JObject createJson = JsonConvert.DeserializeObject<JObject>(createContent);
+            var id = createJson.Value<string>("id");
+
+            var listResponseAfterAdd = await client.GetAsync($"/shoppingLists/{id}");
+            listResponseAfterAdd.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Act
+            var response = await client.DeleteAsync($"/shoppingLists/{id}") ;
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var listResponseAfterDelete = await client.GetAsync($"/shoppingLists/{id}");
+            listResponseAfterDelete.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

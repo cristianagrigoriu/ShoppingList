@@ -70,7 +70,7 @@ namespace Shopping_List.Controllers
 
             shoppingListsRepository.UpdateItemAsync(id, updatedShoppingList);
 
-            return Ok(updatedShoppingListModel); //should return Id in updated list as well
+            return Ok(updatedShoppingListModel); //should return Id in updated list as well?
         }
 
         [HttpDelete("{id}")]
