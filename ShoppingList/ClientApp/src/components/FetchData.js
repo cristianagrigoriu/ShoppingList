@@ -32,6 +32,9 @@ export class FetchData extends Component {
                 <td>{shoppingList.description}</td>
                 <td>{shoppingList.isCompleted ? "True" : "False"}</td>
                 <td>{shoppingList.dateTimeAdded}</td>
+                <td>
+                    <button type="button" className="btn btn-primary" onClick={this.deleteList}>Delete</button>
+                </td>
             </tr>
           )}
         </tbody>
@@ -55,6 +58,11 @@ export class FetchData extends Component {
       }).then(response => {
           return response.json()
       });
+  }
+
+  deleteList()
+  {
+      console.log("Delete");
   }
 
   render() {

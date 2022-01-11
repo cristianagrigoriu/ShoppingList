@@ -13,10 +13,13 @@ namespace Shopping_List.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly IShoppingListsRepository shoppingListsRepository;
+        private readonly INotificationService notificationService;
 
-        public ShoppingListsController(IShoppingListsRepository shoppingListsRepository)
+        public ShoppingListsController(IShoppingListsRepository shoppingListsRepository,
+            INotificationService notificationService)
         {
             this.shoppingListsRepository = shoppingListsRepository;
+            this.notificationService = notificationService;
         }
 
         [HttpGet]
@@ -48,6 +51,8 @@ namespace Shopping_List.Controllers
             };
 
             await shoppingListsRepository.AddItemAsync(newShoppingList);
+
+            await this.notificationService.Send(new NewShoppingListAddedEvent(newShoppingList));
 
             return Created("", newShoppingList);
         }
@@ -83,5 +88,24 @@ namespace Shopping_List.Controllers
 
             return Ok();
         }
+    }
+
+    public interface INotificationService
+    {
+        Task Send(IEvent newShoppingListAddedEvent);
+    }
+
+    public class NewShoppingListAddedEvent : IEvent
+    {
+        private ShoppingList newShoppingList;
+
+        public NewShoppingListAddedEvent(ShoppingList newShoppingList)
+        {
+            this.newShoppingList = newShoppingList;
+        }
+    }
+
+    public interface IEvent
+    {
     }
 }

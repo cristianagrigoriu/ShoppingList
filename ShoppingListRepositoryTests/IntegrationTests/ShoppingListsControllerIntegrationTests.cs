@@ -28,12 +28,12 @@ namespace ShoppingListRepositoryTests
             this.client = factory.CreateClient();
         }
 
-        [SetUp]
-
         [Fact]
         public async Task Get_Shopping_Lists()
         {
             // Act
+            this.Clean();
+
             var response = await client.GetAsync("/shoppingLists");
 
             // Assert
@@ -139,6 +139,10 @@ namespace ShoppingListRepositoryTests
 
             var listResponseAfterDelete = await client.GetAsync($"/shoppingLists/{id}");
             listResponseAfterDelete.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        private void Clean()
+        {
         }
     }
 }
