@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Shopping_List.Messaging;
 using Shopping_List.ShoppingList.WebApi.Models;
 
 namespace Shopping_List.Controllers
@@ -52,7 +53,7 @@ namespace Shopping_List.Controllers
 
             await shoppingListsRepository.AddItemAsync(newShoppingList);
 
-            await this.notificationService.Send(new NewShoppingListAddedEvent(newShoppingList));
+            await this.notificationService.Send(new NewShoppingListAddedEvent(newShoppingList.ToModel()));
 
             return Created("", newShoppingList);
         }
@@ -88,24 +89,5 @@ namespace Shopping_List.Controllers
 
             return Ok();
         }
-    }
-
-    public interface INotificationService
-    {
-        Task Send(IEvent newShoppingListAddedEvent);
-    }
-
-    public class NewShoppingListAddedEvent : IEvent
-    {
-        private ShoppingList newShoppingList;
-
-        public NewShoppingListAddedEvent(ShoppingList newShoppingList)
-        {
-            this.newShoppingList = newShoppingList;
-        }
-    }
-
-    public interface IEvent
-    {
     }
 }
