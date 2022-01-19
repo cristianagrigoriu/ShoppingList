@@ -14,13 +14,13 @@ namespace Shopping_List.Controllers
     public class ShoppingListsController : ControllerBase
     {
         private readonly IShoppingListsRepository shoppingListsRepository;
-        private readonly INotificationService notificationService;
+        private readonly INotificationSender notificationSender;
 
         public ShoppingListsController(IShoppingListsRepository shoppingListsRepository,
-            INotificationService notificationService)
+            INotificationSender notificationSender)
         {
             this.shoppingListsRepository = shoppingListsRepository;
-            this.notificationService = notificationService;
+            this.notificationSender = notificationSender;
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace Shopping_List.Controllers
 
             await shoppingListsRepository.AddItemAsync(newShoppingList);
 
-            await this.notificationService.Send(new NewShoppingListAddedEvent(newShoppingList.ToModel()));
+            await this.notificationSender.Send(new NewShoppingListAddedEvent(newShoppingList.ToModel()));
 
             return Created("", newShoppingList);
         }

@@ -2,6 +2,6 @@
 {
     public interface ILogService
     {
-        void CreateLog();
+        void ReceiveLog();
     }
 }

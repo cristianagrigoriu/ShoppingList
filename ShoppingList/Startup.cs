@@ -44,7 +44,7 @@ namespace Shopping_List
 
             services.AddSingleton<IShoppingListsRepository>(
                 InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-            services.AddTransient<INotificationService, AmqpNotificationService>();
+            services.AddTransient<INotificationSender, AmqpNotificationSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

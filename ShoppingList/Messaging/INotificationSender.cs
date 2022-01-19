@@ -3,10 +3,8 @@ using Amqp.Listener;
 
 namespace Shopping_List.Messaging
 {
-    public interface INotificationService
+    public interface INotificationSender
     {
         Task Send(IEvent newShoppingListAddedEvent);
-
-        void Receive();
     }
 }
