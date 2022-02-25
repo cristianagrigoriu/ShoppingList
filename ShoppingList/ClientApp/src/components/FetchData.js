@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Toast from 'react-bootstrap/Toast';
 
 export class FetchData extends Component {
   static displayName = 'New name';
@@ -14,7 +15,8 @@ export class FetchData extends Component {
 
   static renderShoppingListsTable(shoppingLists) {
     return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
+      
+      <table className="table table-striped" aria-labelledby="tabelLabel">
         <thead>
           <tr>
             <th>Category</th>
@@ -25,18 +27,32 @@ export class FetchData extends Component {
           </tr>
         </thead>
         <tbody>
-            {shoppingLists.map(shoppingList =>
-                <tr key={shoppingList.category}>
-                <td>{shoppingList.category}</td>
-                <td>{shoppingList.name}</td>
-                <td>{shoppingList.description}</td>
-                <td>{shoppingList.isCompleted ? "True" : "False"}</td>
-                <td>{shoppingList.dateTimeAdded}</td>
-                <td>
-                    <button type="button" className="btn btn-primary" onClick={this.deleteList}>Delete</button>
-                </td>
+          {shoppingLists.map((shoppingList) => (
+            <tr key={shoppingList.category}>
+              <td>{shoppingList.category}</td>
+              <td>{shoppingList.name}</td>
+              <td>{shoppingList.description}</td>
+              <td>{shoppingList.isCompleted ? "True" : "False"}</td>
+              <td>{shoppingList.dateTimeAdded}</td>
+              <td>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.deleteList}
+                >
+                  Delete
+                </button>
+                  </td>
+                  <td>
+                  <Toast>
+                  <Toast.Header>
+                  <strong className="mr-auto">React-Bootstrap</strong>
+                  </Toast.Header>
+                  <Toast.Body>Tralala</Toast.Body>
+                    </Toast>
+                  </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     );

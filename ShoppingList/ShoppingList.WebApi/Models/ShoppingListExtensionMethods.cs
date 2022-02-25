@@ -2,7 +2,7 @@
 {
     public static class ShoppingListExtensionMethods
     {
-        public static ShoppingListModel ToModel(this Controllers.ShoppingList item)
+        public static ShoppingListModel ToModel(this Shopping_List.Controllers.ShoppingList item)
         {
             return new ShoppingListModel
             {
