@@ -22,7 +22,7 @@ export class FetchData extends Component {
         {Array.from({ length: 4 }).map((_, idx) => (
           <Col>
             <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src="holder.js/100px180" />
+              <Card.Img variant="top" src="/images/shopping-cart.png" />
               <Card.Header>{shoppingList.category}</Card.Header>
               <Card.Body>
                 <Card.Title>{shoppingList.name}</Card.Title>
